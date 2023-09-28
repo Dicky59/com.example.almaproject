@@ -3,13 +3,12 @@ package com.example.services
 import com.example.models.Customer
 import com.example.models.CustomerRequest
 import com.example.models.Customers
-import com.example.models.Customers.businessId
 import org.ktorm.database.Database
+import org.ktorm.dsl.eq
 import org.ktorm.entity.add
 import org.ktorm.entity.find
 import org.ktorm.entity.sequenceOf
 import org.ktorm.entity.toSet
-import org.ktorm.dsl.eq
 
 class CustomerService {
 
@@ -20,14 +19,15 @@ class CustomerService {
         password = "postgres"
     )
 
-    fun createCustomer(customerRequest: CustomerRequest): Boolean {
+    suspend fun createCustomer(customerRequest: CustomerRequest): Boolean {
+
         val newCustomer = Customer {
             name = customerRequest.name
             email = customerRequest.email
             homepage = customerRequest.homepage!!
             businessId = customerRequest.businessId!!
-            streetAddress = customerRequest.streetAddress!!
-            phone = customerRequest.phone!!
+            streetAddress = getCustomerAddress(businessId!!)
+            phone = getCustomerPhone(businessId!!)
         }
 
         val affectedRecordsNumber =
@@ -50,5 +50,4 @@ class CustomerService {
 
         return affectedRecordsNumber == 1
     }
-
 }
