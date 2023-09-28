@@ -1,6 +1,5 @@
 package com.example.services
 
-import com.example.models.Customers
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
